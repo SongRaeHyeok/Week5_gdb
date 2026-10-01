@@ -65,8 +65,10 @@ static void expand(const Config *c, const char *tmpl, char *out, size_t outcap) 
             key[kl] = '\0';
 
             const char *v = cfg_get(c, key);      
-            size_t vl = strlen(v);                 
-            if (o + vl < outcap) { memcpy(out + o, v, vl); o += vl; }
+            if(v){
+                size_t vl = strlen(v);                 
+                if (o + vl < outcap) { memcpy(out + o, v, vl); o += vl; }
+            }
             p = end + 1;
         } else {
             if (o + 1 < outcap) out[o++] = *p;
@@ -87,6 +89,7 @@ int main(void) {
     Config cfg = { .n = 0 };
     cfg_set(&cfg, "host", "example.com");
     cfg_set(&cfg, "port", "8080");
+    cfg_set(&cfg, "path", "docs");
 
     /* [Thinking Point]
      * "${host}" 처럼 ${...} 로 감싼 부분은 expand 함수가 설정값으로 치환하는 'placeholder' 다.

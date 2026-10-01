@@ -73,20 +73,28 @@ static void dirty_heap(void) {
 
 static int **make_matrix(void) {
 
-    int **rows = malloc(ROWS * sizeof(int *));
-    if (!rows) { perror("malloc"); exit(1); }
+    int **rows = calloc(ROWS, sizeof(int *));
+    if (!rows) { perror("calloc"); exit(1); }
 
     for (int i = 0; i < ROWS; i += 2) {
         int *r = malloc(COLS * sizeof(int));
         for (int j = 0; j < COLS; j++) r[j] = i * COLS + j;
         rows[i] = r;
     }
+
+    // for (int i = 1; i < ROWS; i += 2) {
+    //     int *p = calloc(COLS, sizeof(int));
+    //     rows[i] = p;
+    // }
+
     return rows;
 }
 
 static long row_sum(int **rows, int nrows) {
     long total = 0;
     for (int i = 0; i < nrows; i++) {
+        // if(i % 2 == 1) continue;
+        if(rows[i] == NULL) continue;
         for (int j = 0; j < COLS; j++) {
             total += rows[i][j];      
         }
